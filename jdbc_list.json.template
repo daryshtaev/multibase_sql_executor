@@ -1,0 +1,4 @@
+[
+{"jdbc_url":"jdbc:postgresql://server1:5432/base1", "jdbc_username":"postgres", "jdbc_password":"somepass1"},
+{"jdbc_url":"jdbc:postgresql://server2:5432/base2", "jdbc_username":"postgres", "jdbc_password":"somepass2"}
+]
