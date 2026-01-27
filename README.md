@@ -4,3 +4,5 @@
 Только для баз PostgreSQL.
 
 Python 3.11.
+
+Java 1.8.
