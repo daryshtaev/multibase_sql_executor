@@ -1,5 +1,5 @@
 #### Текст SQL-запроса (допустимы запрос только типа "SELECT")
-sql_query_select_only.text=select distinct documentclass_id from budgorder
+sql_query_select_only.file=select_query.sql
 #### Путь к библиотеке Java VM для ее запуска:
 ## Библиотека JVM для Linux:
 #java.libjvm.file=/usr/java/jdk1.8.0_77/jre/lib/amd64/server/libjvm.so

@@ -1,23 +1,17 @@
 # https://github.com/daryshtaev/arclogrotator
-# version 1.0.4
+# version 1.0.5
 
-import gzip
-import logging
-import os
-import shutil
+import gzip, logging, os, shutil
 from logging.handlers import RotatingFileHandler  # TimedRotatingFileHandler
-
 
 def namer(name):
     return name + ".gz"
-
 
 def rotator(source, dest):
     with open(source, 'rb') as f_in:
         with gzip.open(dest, 'wb') as f_out:
             shutil.copyfileobj(f_in, f_out)
     os.remove(source)
-
 
 def init_logger(directory=os.path.dirname(os.path.realpath(__file__)), file='app.log', max_bytes=524288, backup_count=10, level=logging.INFO):
     # Защита на случай, если из приклада передали "file = None", такое случается, если параметр читают из properties-файла:
@@ -27,7 +21,7 @@ def init_logger(directory=os.path.dirname(os.path.realpath(__file__)), file='app
     if level is None:
         level = logging.INFO
     log_file = os.path.join(directory, file)
-    log_format = '%(asctime)s.%(msecs)03d,%(threadName)s,%(levelname)s,%(name)s,%(message)s'
+    log_format = '%(asctime)s.%(msecs)03d,PID(%(process)d),TID(%(thread)d),%(threadName)s,%(levelname)s,%(name)s,%(message)s'
     log_date_format = '%d.%m.%y %H:%M:%S'
     log_formatter = logging.Formatter(log_format, datefmt=log_date_format)
     # Пример инициализации лога, который "вращается" по моменту времени - в частности "каждую полночь (midnight)":
