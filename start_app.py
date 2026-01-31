@@ -5,7 +5,7 @@ from modules.arclogrotator import init_logger
 from modules.properties_reader import Properties
 
 # Версия программы
-app_ver = '0.0.3'
+app_ver = '0.0.4'
 
 def get_jdbc(url):
     splitted_url = url.split(":")
@@ -43,7 +43,8 @@ logger = init_logger(directory=app_dir, file=log_file, level=log_level)
 status_text = f'App started, version {app_ver}.'
 logger.info(status_text)
 java_libjvm_file = prop.get_property("java.libjvm.file")
-jdbc_connections_file = prop.get_property("jdbc.connection.list.file")
+jdbc_connections_file = prop.get_property("jdbc.connection.list.file","jdbc_list.json")
+result_file = prop.get_property("result.file","result.txt")
 sql_param_name = "sql_query_select_only.file"
 sql_query_file = prop.get_property(sql_param_name)
 with open(sql_query_file, 'r', encoding='utf-8') as file:
@@ -79,6 +80,7 @@ for jdbc_connection in jdbc_connections:
     status_text = f'SQL executed.'
     logger.info(status_text)
     sql_result_items = cur.fetchall()
+    result_file_write = open(result_file, 'a', encoding='utf-8')
 
     for item in sql_result_items:
         # (Начало) Блок для вывода данных о базах на серверах в формате для файла "jdbc_list.json"
@@ -89,7 +91,8 @@ for jdbc_connection in jdbc_connections:
         #result = f'{print_curly_brace1}"jdbc_url":"{db_jdbc_url}","jdbc_username":"{con_jdbc_username}","jdbc_password":"{con_jdbc_password}"{print_curly_brace2},'
         # (Конец) Блок для вывода данных о базах на серверах в формате для файла "jdbc_list.json".
         result = f'{con_jdbc_url},{con_jdbc_username}\t{item[0]}\t{item[1]}'
-        print(result)
+        #print(result)
+        result_file_write.write(result + '\n')
     cur.close()
     con.close()
 jpype.shutdownJVM()
