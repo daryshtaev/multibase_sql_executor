@@ -1,9 +1,11 @@
 #### Текст SQL-запроса (допустимы запрос только типа "SELECT")
-sql_query_select_only.file=select_query.sql
+sql_select_query.file=select_query.sql
 #### Путь к библиотеке Java VM для ее запуска:
 ## Библиотека JVM для Linux:
 #java.libjvm.file=/usr/java/jdk1.8.0_77/jre/lib/amd64/server/libjvm.so
 ## Библиотека JVM для Windows:
 java.libjvm.file=C:/PROGRA~1/Java/jre-1.8/bin/server/jvm.dll
 #### Список JDBC-подключений:
-jdbc.connection.list.file=jdbc_list.json
+jdbc_connections.file=jdbc_list.json
+#### Файл с результатом выполнения запроса:
+result.file=result.txt
