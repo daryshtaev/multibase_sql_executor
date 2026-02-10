@@ -5,7 +5,7 @@ from modules.arclogrotator import init_logger
 from modules.properties_reader import Properties
 
 # Версия программы
-app_ver = '0.0.5'
+app_ver = '0.0.6'
 
 def get_jdbc(url):
     splitted_url = url.split(":")
@@ -13,7 +13,6 @@ def get_jdbc(url):
     jdbc_lib_jars = [
         {'firebirdsql': {'driver_class': 'org.firebirdsql.jdbc.FBDriver', 'jdbc_jar': jdbc_jar_firebird}},
         {'oracle': {'driver_class': 'oracle.jdbc.driver.OracleDriver', 'jdbc_jar': jdbc_jar_oracle}},
-        {'postgres': {'driver_class': 'org.postgresql.Driver', 'jdbc_jar': jdbc_jar_postres}},
         {'postgresql': {'driver_class': 'org.postgresql.Driver', 'jdbc_jar': jdbc_jar_postres}}
     ]
     jdbc_jar = []
