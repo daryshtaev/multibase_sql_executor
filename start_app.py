@@ -5,7 +5,7 @@ from modules.arclogrotator import init_logger
 from modules.properties_reader import Properties
 
 # Версия программы
-app_ver = '0.0.6'
+app_ver = '0.0.7'
 
 def get_jdbc(url):
     splitted_url = url.split(":")
@@ -32,8 +32,7 @@ log_level = prop.get_property('log.level', 'INFO')
 logger = init_logger(directory=app_dir, file=log_file, level=log_level)
 
 try:
-    status_text = f'App started, version {app_ver}.'
-    logger.info(status_text)
+    logger.info(f'App started, version {app_ver}.')
     java_libjvm_file = prop.get_property("java.libjvm.file")
     jdbc_connections_file = prop.get_property("jdbc.connection.list.file","jdbc_list.json")
     result_file = prop.get_property("result.file","result.txt")
@@ -60,17 +59,15 @@ try:
         con_jdbc_password = jdbc_connection["jdbc_password"]
         con_jdbc_driver = get_jdbc(con_jdbc_url)["driver_class"]
         con_jdbc_jar = get_jdbc(con_jdbc_url)["jdbc_jar"]
-        status_text = f'{con_jdbc_url},{con_jdbc_username} connecting.'
-        logger.info(status_text)
+        logger.info(f'JDBC connection opening - {con_jdbc_url},{con_jdbc_username}')
         con = jaydebeapi.connect(con_jdbc_driver, con_jdbc_url, {'user': con_jdbc_username, 'password': con_jdbc_password}, con_jdbc_jar)
-        status_text = f'{con_jdbc_url},{con_jdbc_username} connected.'
-        logger.info(status_text)
+        logger.info('JDBC connection opened.')
+        logger.info('JDBC cursor opening.')
         cur = con.cursor()
-        status_text = 'SQL - executing.'
-        logger.info(status_text)
+        logger.info('JDBC cursor opened.')
+        logger.info('SQL executing.')
         cur.execute(sql_query_select)
-        status_text = 'SQL - executed.'
-        logger.info(status_text)
+        logger.info('SQL executed.')
         sql_result_items = cur.fetchall()
         result_file_write = open(result_file, 'a', encoding='utf-8')
 
@@ -78,14 +75,11 @@ try:
             result = f'{con_jdbc_url},{con_jdbc_username}\t{item[0]}'
             result_file_write.write(result + '\n')
         cur.close()
-        status_text = 'SQL - cursor closed.'
-        logger.info(status_text)
+        logger.info('JDBC cursor closed.')
         con.close()
-        status_text = 'SQL - connection closed.'
-        logger.info(status_text)
+        logger.info('JDBC connection closed.')
     jpype.shutdownJVM()
 except Exception as e:
         logger.error(e)
 finally:
-    status_text = 'App completed.'
-    logger.info(status_text)
+    logger.info('App completed.')
