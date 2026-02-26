@@ -5,7 +5,7 @@ from modules.arclogrotator import init_logger
 from modules.properties_reader import Properties
 
 # Версия программы
-app_ver = '0.0.7'
+app_ver = '0.0.8'
 
 def get_jdbc(url):
     splitted_url = url.split(":")
@@ -60,19 +60,23 @@ try:
         con_jdbc_driver = get_jdbc(con_jdbc_url)["driver_class"]
         con_jdbc_jar = get_jdbc(con_jdbc_url)["jdbc_jar"]
         logger.info(f'JDBC connection opening - {con_jdbc_url},{con_jdbc_username}')
-        con = jaydebeapi.connect(con_jdbc_driver, con_jdbc_url, {'user': con_jdbc_username, 'password': con_jdbc_password}, con_jdbc_jar)
-        logger.info('JDBC connection opened.')
-        logger.info('JDBC cursor opening.')
-        cur = con.cursor()
-        logger.info('JDBC cursor opened.')
-        logger.info('SQL executing.')
-        cur.execute(sql_query_select)
-        logger.info('SQL executed.')
-        sql_result_items = cur.fetchall()
-        result_file_write = open(result_file, 'a', encoding='utf-8')
+        try:
+            con = jaydebeapi.connect(con_jdbc_driver, con_jdbc_url, {'user': con_jdbc_username, 'password': con_jdbc_password}, con_jdbc_jar)
+            logger.info('JDBC connection opened.')
+            logger.info('JDBC cursor opening.')
+            cur = con.cursor()
+            logger.info('JDBC cursor opened.')
+            logger.info('SQL executing.')
+            cur.execute(sql_query_select)
+            logger.info('SQL executed.')
+            sql_result_items = cur.fetchall()
+            result_file_write = open(result_file, 'a', encoding='utf-8')
+        except Exception as e:
+            logger.error(e)
+            continue
 
         for item in sql_result_items:
-            result = f'{con_jdbc_url},{con_jdbc_username}\t{item[0]}'
+            result = f'{con_jdbc_url},{con_jdbc_username}\t{item[0]}\t{item[1]}'
             result_file_write.write(result + '\n')
         cur.close()
         logger.info('JDBC cursor closed.')
